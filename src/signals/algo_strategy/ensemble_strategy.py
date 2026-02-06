@@ -44,15 +44,15 @@ class EnsembleOptunaStrategy(Strategy):
         
         # Track accumulated returns per group (feature_set, feature_frequency)
         self.accumulated_returns = {}  # Key: (feature_set, feature_frequency), Value: cumulative return
+        maximum_models_per_group = 50
         
-        #for freq in range(3, 6):
         for freq in range(self.frequency_range[0], self.frequency_range[1], self.frequency_range_step):     
-            for i in range(0, 10):
-                self.strategies[f'LGBM_regime_{freq}_{i}'] = CatBoostOptunaStrategy(feature_set="regime_", symbol=symbol, n_trials=10, feature_frequency=f"_{freq}")
-            for i in range(0, 10):
-                self.strategies[f'LGBM_tech_{freq}_{i}'] = CatBoostOptunaStrategy(feature_set="tech_", symbol=symbol, n_trials=10, feature_frequency=f"_{freq}")
-            for i in range(0, 10):
-                self.strategies[f'LGBM_mr_{freq}_{i}'] = CatBoostOptunaStrategy(feature_set="mr_", symbol=symbol, n_trials=10, feature_frequency=f"_{freq}")
+            for i in range(0, maximum_models_per_group):
+                self.strategies[f'LGBM_regime_{freq}_{i}'] = LGBMOptunaStrategy(feature_set="regime_", symbol=symbol, n_trials=10, feature_frequency=f"_{freq}")
+            for i in range(0, maximum_models_per_group):
+                self.strategies[f'LGBM_tech_{freq}_{i}'] = LGBMOptunaStrategy(feature_set="tech_", symbol=symbol, n_trials=10, feature_frequency=f"_{freq}")
+            for i in range(0, maximum_models_per_group):
+                self.strategies[f'LGBM_mr_{freq}_{i}'] = LGBMOptunaStrategy(feature_set="mr_", symbol=symbol, n_trials=10, feature_frequency=f"_{freq}")
         
         print(f"Ensemble Strategy initialized with {len(self.strategies)} strategies")
 
@@ -217,9 +217,6 @@ class EnsembleOptunaStrategy(Strategy):
 
             last_months_returns = prev_accumulated_return[-self.accumulated_returns_months:] if len(prev_accumulated_return) >= self.accumulated_returns_months else prev_accumulated_return
 
-            #train_max = int(0.6*len(last_months_returns))
-            #last_months_returns_train = last_months_returns[:train_max]
-            #last_months_returns_test = last_months_returns[train_max:]
             last_months_returns_train = last_months_returns
             last_months_returns_test = last_months_returns
 
@@ -286,18 +283,14 @@ class EnsembleOptunaStrategy(Strategy):
                 }
         
         # Sort groups by cumulative return (descending) and take top 3
-        #sorted_groups_test = sorted(valid_group_predictions.items(), key=lambda x: x[1]['cum_return_test'], reverse=True)
+        
         sorted_groups_all = sorted(valid_group_predictions.items(), key=lambda x: x[1]['cum_return'], reverse=True)
-        #sorted_groups_train = sorted(valid_group_predictions.items(), key=lambda x: x[1]['cum_return_train'], reverse=True)
+        
         
         # Combine the best from all three sorts
         combined_top_groups = {}
         for group_key, group_info in sorted_groups_all[:self.n_groups]:
             combined_top_groups[group_key] = group_info
-        #for group_key, group_info in sorted_groups_train[:self.n_groups]:
-        #    combined_top_groups[group_key] = group_info
-        #for group_key, group_info in sorted_groups_test[:self.n_groups]:
-        #    combined_top_groups[group_key] = group_info
         
         top_n_groups = list(combined_top_groups.items())[:self.n_groups]
         

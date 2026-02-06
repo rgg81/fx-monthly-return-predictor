@@ -1,5 +1,5 @@
 import pandas as pd
-from signals.strategy import RandomStrategy
+from strategy import RandomStrategy
 import quantstats as qs
 
 class Backtest:
