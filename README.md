@@ -1,23 +1,22 @@
-# 📈 Fundamental Trading Signals
+# 📈 FX Monthly Return Predictor
 
-[![Build Status](https://github.com/rgg81/fundamental-trading-signals/actions/workflows/ci.yml/badge.svg)](https://github.com/rgg81/fundamental-trading-signals/actions)
+[![Build Status](https://github.com/rgg81/fx-monthly-return-predictor/actions/workflows/ci.yml/badge.svg)](https://github.com/rgg81/fx-monthly-return-predictor/actions)
 
-An open-source project for generating **buy/sell signals** based on **fundamental macroeconomic data** like **inflation, interest rates, money supply, and trade balances**.
+A machine learning system that **predicts monthly returns** for FX pairs and gold (XAUUSD) using **OHLC price data**, technical indicators, mean reversion signals, and regime detection features. Employs ensemble ML strategies with Optuna hyperparameter optimization.
 
 ## 🚀 Features
-✅ Fetch **fundamental macroeconomic indicators** from sources like **FRED**  
-✅ Preprocess and transform raw economic data into **usable features**  
-✅ Apply **machine learning models** (Regime-Switching, Random Forests, LSTMs)  
-✅ Generate **buy/sell trading signals** based on macroeconomic trends  
-✅ Backtest strategies with **historical data**  
+✅ Predict **monthly returns** from OHLC price data for multiple FX pairs  
+✅ Engineer features across three categories: **technical indicators, mean reversion, and regime detection**  
+✅ Train **ensemble ML models** (LightGBM, XGBoost, CatBoost, Random Forest, Neural Networks, and more)  
+✅ Optimize hyperparameters with **Optuna** using two-step bitmap feature selection  
+✅ Backtest strategies with **walk-forward validation** and adaptive portfolio construction  
+✅ Build **multi-currency portfolios** with dynamic pair weighting  
 
-## 📊 Data Sources
-We fetch macroeconomic indicators from:
-- **[FRED (Federal Reserve Economic Data)](https://fred.stlouisfed.org/)**
-- ECB, World Bank (planned)
+## 📊 Supported Instruments
+EURUSD, USDJPY, EURJPY, GBPUSD, AUDUSD, XAUUSD
 
 ## 🛠 Installation
 ```bash
-git clone https://github.com/rgg81/fundamental-trading-signals.git
-cd fundamental-trading-signals
+git clone https://github.com/rgg81/fx-monthly-return-predictor.git
+cd fx-monthly-return-predictor
 pip install -r requirements.txt
