@@ -6,6 +6,10 @@ import os
 import random
 from datetime import datetime, timedelta
 
+# Add both paths: src/ for "signals.strategy" imports, src/signals/ for direct imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src', 'signals'))
+
 from signals.backtest import Backtest
 from signals.strategy import Strategy
 
